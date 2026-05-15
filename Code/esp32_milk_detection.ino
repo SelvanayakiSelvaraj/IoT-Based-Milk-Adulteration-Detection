@@ -1,0 +1,63 @@
+/**************************************************
+ IoT-Based Milk Adulteration Detection System
+ Using ESP32 + AS7265x + Blynk
+**************************************************/
+
+#include <Wire.h>
+#include "SparkFun_AS7265X.h"
+#include <WiFi.h>
+#include <BlynkSimpleEsp32.h>
+
+char auth[] = "YOUR_BLYNK_TOKEN";
+char ssid[] = "YOUR_WIFI_NAME";
+char pass[] = "YOUR_WIFI_PASSWORD";
+
+AS7265X sensor;
+
+float thresholdMin = 450.0;
+float thresholdMax = 550.0;
+
+void setup() {
+  Serial.begin(115200);
+  Wire.begin();
+
+  Blynk.begin(auth, ssid, pass);
+
+  if (!sensor.begin()) {
+    Serial.println("Sensor not detected. Check wiring.");
+    while (1);
+  }
+
+  sensor.setGain(AS7265X_GAIN_64X);
+  sensor.setIntegrationCycles(50);
+  sensor.setMeasurementMode(AS7265X_MEASUREMENT_MODE_6CHAN_ONE_SHOT);
+
+  Serial.println("System Ready...");
+}
+
+void loop() {
+  Blynk.run();
+
+  sensor.takeMeasurements();
+
+  float averageValue =
+      (sensor.getCalibratedA() +
+       sensor.getCalibratedB() +
+       sensor.getCalibratedC() +
+       sensor.getCalibratedD() +
+       sensor.getCalibratedE() +
+       sensor.getCalibratedF()) / 6.0;
+
+  Serial.print("Average Spectral Value: ");
+  Serial.println(averageValue);
+
+  if (averageValue >= thresholdMin && averageValue <= thresholdMax) {
+    Serial.println("Milk Status: PURE");
+    Blynk.virtualWrite(V0, "PURE");
+  } else {
+    Serial.println("Milk Status: ADULTERATED");
+    Blynk.virtualWrite(V0, "ADULTERATED");
+  }
+
+  delay(3000);
+}
