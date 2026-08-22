@@ -327,11 +327,3 @@ A related research work was published as:
 The work focuses on combining sensor-based milk-quality analysis with IoT technology for real-time adulteration screening.
 
 ---
-
-## 🎯 Project Objective
-
-The primary objective is to develop a **portable dual-sensor IoT system** that combines optical and electrical measurements to support rapid milk-quality screening and improve accessibility to food-safety monitoring.
-
----
-
- 
