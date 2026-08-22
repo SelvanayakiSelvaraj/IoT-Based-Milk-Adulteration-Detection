@@ -334,8 +334,4 @@ The primary objective is to develop a **portable dual-sensor IoT system** that c
 
 ---
 
-## 📜 License
-
-This project is developed for **academic and educational purposes**.
-
-If you use or modify this project, please provide appropriate credit to the original authors.
+ 
